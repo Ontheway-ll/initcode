@@ -25,20 +25,74 @@
       <form class="login_form">
         <i class="iconfont icon-user"></i>
         <i class="iconfont icon-key"></i>
-        <input type="text" class="input_txt" placeholder="用户名">
-        <input type="password" class="input_pass" placeholder="密码">
+        <input id="userName" type="text" class="input_txt" placeholder="用户名">
+        <input id="userPwd" type="password" class="input_pass" placeholder="密码">
         <input id="Login" type="button" class="input_sub" value="登 录">
+        <!-- submit按钮在表单中，点击之后会提交表单，改成button不会-->
       </form>
     </div>
   </div>
 </body>
 <script>
-  // 点击登录,注册点击事件
-  // 获取用户信息
-  // 发送ajax接口，根据反馈做下步动作
+  // 1首先引入js
+  // 2把input里改成用户名和密码
+  // 3form表单里input里的submit提交按钮变成button，否则submit会提交表单
+  // 4js和DOM有管理最好加id，
+  // 5给登录注册点击事件，id="Login"
+  // 6获取用户输入信息，简单判断
+  // 7请求ajax接口，根据反馈做下面动作
   $("#Login").click(function() {
-    // alert(1)
+    // alert(1)//判断点击是否生效
+    var userName = $("#userName").val().trim() //获取用户输入信息，清除两边空格，有一个变量接收
+    var userPwd = $("#userPwd").val().trim()
+      // 简单判断下用户输入信息是否为空
+    if (userName.length === 0 || userPwd.length === 0) {
+      alert("不能为空")
+      return; //不在执行下面的代码，不去发送接口，
+    }
+    // console.log(userName, userPwd);看是否能拿到用户用户输入的值
+
+    // 请求ajax接口
+    $.post('http://192.168.18.6:8000/admin/login', {
+        'user_name': userName,
+        'password': userPwd
+      })
+      .then(function(res) {
+        console.log(res);
+        // 根据反馈做下面的动作
+        if (res.code == 200) {
+          alert("登录成功")
+        } else {
+          alert(res.msg)
+        }
+      })
+
   })
+
+
+
+
+  // ------------------------------------------------第二遍
+  // // 点击登录,注册点击事件,
+  // // 获取用户信息，判断下输入信息
+  // // 发送ajax接口，根据反馈做下步动作
+  // $("#Login").click(function() {
+  //   // alert(1)
+  //   var userName = $("#userName").val().trim()
+  //   var userPwd = $("#userPwd").val().trim()
+  //   if (userName.length === 0 || userPwd.length === 0) {
+  //     alert("不能为空")
+  //     return;
+  //   }
+  //   // 发送ajax
+  //   $.post('http://10.253.2.179:8000/admin/login', {
+  //     'user_name': userName,
+  //     'password': userPwd
+  //   }).then(function(res) {
+  //     console.log(res);
+
+  //   })
+  // })
 </script>
 
 </html>
