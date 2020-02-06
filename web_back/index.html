@@ -107,34 +107,10 @@
       }
     }
   </script>
-  <script>
-    //   定义一个对象，logout是其方法
-    var user = {
-      logout: function() {
-        $.post('http://192.168.18.6:8000/admin/logout').then(function(res) {
-          console.log(res);
-          if (res.code === 200) {
-            alert("退出成功")
-            window.location.href = "./login.html";
-          } else {
-            alert(res.msg)
-          }
-        })
-      },
-      // 1先测试接口用postman，
-      // 2找到用户李思思
-      getInfo: function() {
-        $.get('http://192.168.18.6:8000/admin/getuser').then(function(res) {
-          console.log(res);
-          if (res.code === 200) {
-            // 获取成功，并显示
-            $("#userName").text(res.data.nickname) //获取管理员名字，text
-            $(".userImg").attr('src', res.data.user_pic) //把管理员头像换掉
-          }
-        })
-      }
-    }
-  </script>
+  <!-- 引入config模块 -->
+  <script src="js/util/config.js"></script>
+  <!-- 引入user模块 -->
+  <script src="js/util/user.js"></script>
   <script>
     // 0阻止a标签跳转，javascript:,给他退出添加id
     // 1点击退出按钮，注册点击事件
@@ -145,11 +121,32 @@
     $("#btnLogout").click(function() {
       //   alert(1);
       //  用户退出
-      user.logout()
+      user.logout().then(function(res) {
+        console.log(res);
+        if (res.code === 200) {
+          alert("退出成功")
+          window.location.href = "./login.html";
+        } else {
+          alert(res.msg)
+        }
+      })
     })
 
     // 获取管理员信息并显示
-    user.getInfo()
+    user.getInfo().then(function(res) {
+      console.log(res);
+      if (res.code === 200) {
+        // 获取成功，并显示
+        $("#userName").text(res.data.nickname) //获取管理员名字，text
+        $(".userImg").attr('src', res.data.user_pic) //把管理员头像换掉
+      }
+    })
+
+
+    // user.getInfo()
+    // var rs =user.getInfo()
+    // console.log(rs);有then方法，打印出来
+    // user.getInfo()调函数有返回值=user.js 的rs
   </script>
 
 </body>
